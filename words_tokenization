@@ -1,0 +1,37 @@
+from tweepy import Stream
+from tweepy import OAuthHandler
+from tweepy.streaming import StreamListener
+import json
+import time
+
+ckey ='i2x8HmM8ra3Sect58OhBczZXT'
+csecret = 'Uf0gILQ0suiQF2IbndCM2vm6Vfk6cWupXhVfr8IapGrpEPsTUr'
+atoken= '209034638-K9aVia37zxz9vXSjVMJ8H9Plh8ELHryPeKduJMT1'
+asecret= 'ydAJdHIpdx8XGRH7Ea3m8ztrllHsKF8hSUkpnbx5VDsf1'
+
+class listener(StreamListener):
+    def on_data(self, raw_data):
+        try:
+            all_data=json.loads(raw_data)
+            tweet= all_data["text"]
+            print tweet
+
+            output=open("output_fpe"+ '.csv','a')
+            output.write(tweet + "\n")
+            output.close()
+
+
+
+            return True
+        except:
+            return True
+    def on_error(self, status_code):
+        print (status_code)
+
+auth = OAuthHandler(ckey,csecret)
+auth.set_access_token(atoken,asecret)
+twitterstream = Stream(auth,listener())
+twitterstream.filter(track=("cameron"))
+
+
+
